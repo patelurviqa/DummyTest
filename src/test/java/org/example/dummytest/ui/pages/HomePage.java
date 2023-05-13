@@ -21,7 +21,6 @@ public class HomePage {
 
     //properties for table
     private static final String currencyTableClass = "cmc-table";
-    private static final String scrollCommandformat = "window.scrollBy(0,%d)";
     private static final String tableRowsInTableXpath = "./tbody/tr";
     private static final String nameXpathInTableCell = "./div/a/div/div/p";
     private static final String symbolClassInCell = "coin-item-symbol";
@@ -30,7 +29,6 @@ public class HomePage {
     private static final String circulatingSupplyXpathInTableCell = "./div/div/p";
 
     //properties for filters
-    private static final String filterButtonClass = "table-control-filter";
     private static final String filterRowClass = "fsDYiB";
     private static final String tableControlAreaClass = "table-control-area";
     private static final String filterButtonXpathInTableControlArea = "./div[2]/button";
@@ -87,17 +85,8 @@ public class HomePage {
         webDriverWait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(pageSizeOptionsListId)));
     }
 
-    private void scrollPage(int pixels) {
-        System.out.println("scrolling  by " + pixels);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript(String.format(scrollCommandformat, pixels));
-    }
     public List<CryptoCurrencyInformation> getListedCurrencies() throws ParseException {
-
-//        WebElement table = driver.findElement(By.className(currencyTableClass));
-//        int tableHeight = table.getSize().getHeight();
-//        scrollPage(tableHeight);
-        List<WebElement> tableRows1 = driver.findElement(By.className(currencyTableClass))
+       List<WebElement> tableRows1 = driver.findElement(By.className(currencyTableClass))
                 .findElements(By.xpath(tableRowsInTableXpath));
         Actions actions = new Actions(driver);
         actions.moveToElement(tableRows1.get(tableRows1.size()-1)).perform();
@@ -105,8 +94,6 @@ public class HomePage {
         List<CryptoCurrencyInformation> cryptoCurrencyInformationList = new ArrayList<>();
         List<WebElement> tableRows = driver.findElement(By.className(currencyTableClass))
                 .findElements(By.xpath(tableRowsInTableXpath));
-//        Actions actions = new Actions(driver);
-//        actions.moveToElement(tableRows.get(tableRows.size()-1)).perform();
 
         NumberFormat nfDollars = NumberFormat.getCurrencyInstance(Locale.US);
         NumberFormat nfPercentage = NumberFormat.getPercentInstance(Locale.US);
@@ -134,7 +121,6 @@ public class HomePage {
             System.out.println(information);
         }
 
-        //scrollPage(tableHeight * -1);
         actions.moveToElement(tableRows.get(0)).perform();
         return cryptoCurrencyInformationList;
     }

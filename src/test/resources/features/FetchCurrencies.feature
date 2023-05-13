@@ -1,3 +1,4 @@
+@ui
 Feature: Fetch currency Information from CoinMarketCap
   As a user for CoinmarketCap
   I want to fetch currency information from the portal using filters
