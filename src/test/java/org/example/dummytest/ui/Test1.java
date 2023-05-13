@@ -6,12 +6,9 @@ import org.example.dummytest.ui.pages.HomePage;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Properties;
