@@ -2,6 +2,7 @@ package org.example.dummytest.ui.pages;
 
 import org.example.dummytest.ui.model.CryptoCurrencyInformation;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -93,13 +94,19 @@ public class HomePage {
     }
     public List<CryptoCurrencyInformation> getListedCurrencies() throws ParseException {
 
-        WebElement table = driver.findElement(By.className(currencyTableClass));
-        int tableHeight = table.getSize().getHeight();
-        scrollPage(tableHeight);
+//        WebElement table = driver.findElement(By.className(currencyTableClass));
+//        int tableHeight = table.getSize().getHeight();
+//        scrollPage(tableHeight);
+        List<WebElement> tableRows1 = driver.findElement(By.className(currencyTableClass))
+                .findElements(By.xpath(tableRowsInTableXpath));
+        Actions actions = new Actions(driver);
+        actions.moveToElement(tableRows1.get(tableRows1.size()-1)).perform();
 
         List<CryptoCurrencyInformation> cryptoCurrencyInformationList = new ArrayList<>();
         List<WebElement> tableRows = driver.findElement(By.className(currencyTableClass))
                 .findElements(By.xpath(tableRowsInTableXpath));
+//        Actions actions = new Actions(driver);
+//        actions.moveToElement(tableRows.get(tableRows.size()-1)).perform();
 
         NumberFormat nfDollars = NumberFormat.getCurrencyInstance(Locale.US);
         NumberFormat nfPercentage = NumberFormat.getPercentInstance(Locale.US);
@@ -127,7 +134,8 @@ public class HomePage {
             System.out.println(information);
         }
 
-        scrollPage(tableHeight * -1);
+        //scrollPage(tableHeight * -1);
+        actions.moveToElement(tableRows.get(0)).perform();
         return cryptoCurrencyInformationList;
     }
 
@@ -186,9 +194,10 @@ public class HomePage {
         filterPopup.findElement(By.xpath(applyFiltersXpath)).click();
     }
 
-    public void addCryptoCurrenciesFilter(String option) {
+    public void addCryptoCurrenciesFilter(String option) throws InterruptedException {
         WebElement filtersPopup = openAdditionalFiltersPopup();
         WebElement cryptocurrenciesFilter = filtersPopup.findElement(By.xpath(cryptocurrenciesFilterXpath));
+        Thread.sleep(1000);
         cryptocurrenciesFilter.click();
         WebElement cryptoFilterControls = filtersPopup.findElement(By.xpath(cryptoFilterControlsXpath));
         WebElement optionToSelect = cryptoFilterControls.findElement(
@@ -207,7 +216,7 @@ public class HomePage {
         WebElement filtersPopup = openAdditionalFiltersPopup();
         WebElement priceFilter = filtersPopup.findElement(By.xpath(priceFilterXpath));
         Thread.sleep(1000);
-        priceFilter.sendKeys(Keys.RETURN);
+        priceFilter.click();
 
         WebDriverWait wait = new WebDriverWait(driver, 5);
         wait.until(ExpectedConditions.presenceOfNestedElementLocatedBy(filtersPopup, By.xpath(priceFilterControlsXpath)));
