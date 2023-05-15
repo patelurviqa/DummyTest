@@ -48,25 +48,26 @@ public class StepDefinitions {
         RestAssured.baseURI = properties.getProperty("api_url");
         apiKeyHeader = new Header(apiHeaderKey, properties.getProperty("api_key"));
         contentTypeHeader = new Header(HttpHeaders.ACCEPT,"application/json");
-        System.out.println(apiKeyHeader.toString());
-        System.out.println(contentTypeHeader.toString());
-        RestAssured.useRelaxedHTTPSValidation();
     }
+
     @When("I send a fiat currency conversion request for {double} from {string} to {string}")
     public void i_send_a_fiat_currency_conversion_request_for_from_to(Double amount, String from, String to) {
         sendConversionRequest(amount, from, to);
     }
+
     @Then("I get a successful response")
     public void i_get_a_successful_response() {
         Assert.assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         scenario.log("received response : " + response.asPrettyString());
     }
+
     @Then("I get the converted {string} value")
     public void i_get_the_converted_value(String symbol) {
         ConversionQuoteDto conversionQuoteDto = response.body().as(ConversionQuoteDto.class, getMapper());
         convertedValue = conversionQuoteDto.getData()[0].getQuote().get(symbol).getPrice();
         scenario.log(String.format("converted value is %.12f %s", convertedValue, symbol));
     }
+
     @When("I send a crypto currency conversion request for converted value from {string} to {string}")
     public void i_send_a_crypto_currency_conversion_request_for_converted_value_from_to(String from, String to) {
         sendConversionRequest(convertedValue, from, to);

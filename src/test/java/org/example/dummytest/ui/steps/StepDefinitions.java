@@ -13,7 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -58,7 +57,8 @@ public class StepDefinitions {
     @Then("I can capture information for first set of currencies")
     public void i_can_capture_information_for_first_set_of_currencies() throws ParseException {
         currencyInformationList1 = homePage.getListedCurrencies();
-        scenario.log("unfiltered currencies found as below :");for (CryptoCurrencyInformation c :  currencyInformationList1) {
+        scenario.log("unfiltered currencies found as below :");
+        for (CryptoCurrencyInformation c :  currencyInformationList1) {
             scenario.log(c.toString());
         }
     }
@@ -66,30 +66,36 @@ public class StepDefinitions {
     public void i_filter_by_with_value(String string, String string2) {
         homePage.setSimpleFilter("Algorithm", "PoW");
     }
-    @When("I filter by additional mineable filter with value true")
-    public void i_filter_by_additional_mineable_filter_with_value_true() {
-        homePage.toggleMineableFilter(true);
+
+    @When("I filter by additional mineable filter with value {string}")
+    public void i_filter_by_additional_mineable_filter_with_value_true(String value) {
+        homePage.toggleMineableFilter(Boolean.valueOf(value));
     }
+
     @When("I filter by additional All cryptocurrencies filter with value {string}")
-    public void i_filter_by_additional_all_cryptocurrencies_filter_with_value(String string) throws InterruptedException {
-        homePage.addCryptoCurrenciesFilter("Coins");
+    public void i_filter_by_additional_all_cryptocurrencies_filter_with_value(String value) throws InterruptedException {
+        homePage.addCryptoCurrenciesFilter(value);
     }
+
     @When("I filter by additional Price filter with values {int} and {int}")
-    public void i_filter_by_additional_price_filter_with_values_and(Integer int1, Integer int2) throws InterruptedException {
-        homePage.addPriceFilter(100, 10000);
+    public void i_filter_by_additional_price_filter_with_values_and(Integer min, Integer max) throws InterruptedException {
+        homePage.addPriceFilter(min, max);
     }
+
     @When("I apply the filters")
     public void i_apply_the_filters() {
         homePage.applyAdditionalFilters();
     }
+
     @Then("I can capture information for second set of currencies")
     public void i_can_capture_information_for_second_set_of_currencies() throws ParseException {
         currencyInformationList2 = homePage.getListedCurrencies();
         scenario.log("filtered currencies found as below :");
-        for (CryptoCurrencyInformation c :  currencyInformationList1) {
+        for (CryptoCurrencyInformation c :  currencyInformationList2) {
             scenario.log(c.toString());
         }
     }
+    
     @Then("I can compare first and second currency sets")
     public void i_can_compare_first_and_second_currency_sets() {
         scenario.log("unfiltered currencies count : " + currencyInformationList1.size());
